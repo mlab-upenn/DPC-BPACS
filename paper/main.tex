@@ -170,113 +170,24 @@ FOR 2018 BUILDING PERFORMANCE MODELING CONFERENCE and SIMBUILD CO-ORGANIZED BY A
 }
 \maketitle
 \thispagestyle{empty}
-% --------------------------------------------------------
-\section{ABSTRACT}
-This document explains how to prepare a paper for submission to the 2018 Building Performance Modeling Conference and SimBuild co-organized by ASHRAE and IBPSA-USA. It also includes the instructions for submission and some additional information. This document can be used as a template with \LaTeX.
-
 
 % --------------------------------------------------------
-\section{INTRODUCTION}
-The paper should be prepared for letter-size paper (ANSI A at 8.5 x 11 inches), with overall margins of one inch on all sides of the paper (top, bottom, right and left). Use font type Times (Times New Roman) for the entire document, with different styles at different parts of the paper, as indicated below.
+\input{abstract.tex}
 
-The top section of the first page of the paper should contain the paper title, author list, and affiliations. This section should consist of 10 lines in 14-point spacing.
+% --------------------------------------------------------
+\input{intro.tex}
 
-After these 10 lines, the rest of the document should be in two-column format. Each column should be 3.125 inches wide, with a centered column gutter of 0.25 inch. The left edge of the first column should be one inch from the left edge of the paper; the left edge of the second column, 4.375 inches from the left edge of the paper. You must leave the one-inch margin at the bottom for page numbers but please DO NOT include them.  The maximum number of pages is eight.
+% --------------------------------------------------------
+\input{scada.tex}
+
+% --------------------------------------------------------
+\input{instructions.tex}
 
 
 % --------------------------------------------------------
-\section{PARTS OF THE PAPER}
-\subsection{Title, authors, and authors' and affiliations}
-Titles should be in 12-point font, bold and capitalized. Do not use more then two lines for the title, and try to limit the title to ten words.
+\input{conclusion.tex}
 
-Authors, affiliations, and additional contact information should be in 12-point font. Authors with more than one affiliation should indicate additional affiliations by numbers, superscripted following the author's name.
-
-You can add contact information (e.g. e-mail address, telephone number, postal address, etc.) and other information as you wish, within the 10-line limitation.  If you require fewer than 10 lines for this information, please leave the remaining lines blank.
-
-\subsection{Abstract}
-The abstract, limited to about 100 words, should consist of a concise, self-contained description of the paper that clearly identifies the unique features of your study.
-
-\subsection{Main body}
-The main body of the paper should contain (but is not limited to):
-\begin{itemize}
-\item
-Introduction
-\item
-Simulation and/or experiment
-\item
-Discussion and result analysis
-\item
-Conclusion
-\item
-Acknowledgments
-\item
-Nomenclature, if needed
-\end{itemize}
-The headings of each section should use 12-point font, capitalized and underlined, with 6 and 3 points spacing above and below. The headings of the subsections should use 12-point font, in bold, with 6 and 3 points spacing above and below. The text should be typed in 10-point font with either single-line or 12-point spacing. Neither the sections or subsections should be numbered.
-
-
-\subsection{References}
-All publications cited in the text should be listed at the end of the paper and should be ordered alphabetically by author name.  All lines, other than the first in each entry, should be indented. In the main text, refer to a reference using author-year style
-such as \cite{InePerSea1987} and \cite{Modest1993}.
-
-\subsection{Figures and Tables}
-Figures and tables, both of which must have numbers and captions, can be included in the body of the text or collected at the end of the paper. Color images are welcome.  Figure 1 is an example of a graph in the text with a caption below the figure. Please include a blank line above the figure and below the caption.
-
-\begin{figure}[h!]
-\centering
-\begin{tabular}{|c|}
-\hline ~\\
-\Large{Inserted figure} \\ ~\\
- \\
- \\
- \\ \hline
-\end{tabular}
-\caption{Example of a figure}
-\end{figure}
-
-Table 1 shows an example of a table, where the caption should be on the top of the table.
-
-\begin{table}[h!]
-\caption{Example of a table}
-\centering
-\begin{tabular}{|l|l|l|} \hline
-\bf Heading 1 & \bf Heading 2 & \bf Heading 3 \\ \hline
-Entry 1 & Entry 2 & Entry 3 \\ \hline
-\end{tabular}
-\end{table}
-
-Oversized figures and tables may be included in the body of the text or collected at the end. Figure 2 is an example of an oversized figure.
-
-\subsection{Equations}
-Mathematical symbols and formulae should be clear to avoid ambiguities. Equation numbers should appear in parentheses and be numbered consecutively. A brief description of the symbols used in your paper should then be added in a nomenclature section at the end of the text.
-
-\section{IF YOU USE \LaTeX}
-This document can be used as a template for use with \LaTeX. Please use the style for each section, as it has been defined in this template. You can use this document directly, cut-and-paste your paper from other document(s) into this document.
-Submission of the paper must be in PDF format.
-
-\section{SUBMISSION INSTRUCTIONS}
-\begin{enumerate}
-\item
-{\it In light of the double-blind review, please do not include your name and affiliation on the draft submitted for review.}
-\item
-Please convert your document to PDF format. Other formats are NOT acceptable.
-\item
-The filename must reference your ID\#. 
-\item
-Please submit your paper through Conftool. Your specific link was included in your abstract acceptance letter (.  If your paper does not meet the submission requirements, your file will not be processed for review. 
-\item 
-You will receive a confirmation via e-mail if your paper is successfully uploaded. (BPACS 2018 -- Abstract decision email) You may submit your Conference Paper in advance of the February 2 deadline. You will be notified of the results of the peer review in March and may be asked to submit revisions for re-review.
-\end{enumerate}
-% --------------------------------------------------------
-\section{CONCLUSION}
-This paper has described how to prepare a paper for submission to the 2018 Building Performance Modeling Conference and SimBuild co-organized by ASHRAE and IBPSA-USA. Good luck with your paper. Hope to see you in Chicago!
-
-\section{ACKNOWLEDGMENT}
-This document was derived from the author guidelines used for the 2003, 2005, 2008, 2014, and 2016 Building Simulation Conferences.
-
-% --------------------------------------------------------
-
-{ \bibliography{xbib} }
+\bibliography{references}
 
 % --------------------------------------------------------
 \section{NOMENCLATURE}
@@ -285,11 +196,6 @@ This document was derived from the author guidelines used for the 2003, 2005, 20
   $e$        & error \\
   $E$        & energy \\
   $T$        & temperature \\
-  $\epsilon$ & solver precision parameter \\
-  $\epsilon^*$ & highest setting for solver precision parameter \\
-  $a \in A$      & $a$ is an element of $A$\\
-  $\Re$      & set of real numbers \\
-  $\triangleq$ & equal by definition \\
 \end{tabular}
 
  
