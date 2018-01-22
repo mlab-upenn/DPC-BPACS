@@ -1,4 +1,30 @@
 \section{SCADA}
 
-\subsection{blah}
+\subsection{Introduction}
 
+Supervisory Control and Data Acquisition software (SCADA) is a commonly found building automation system used by operators to manage individual buildings up to multi-location campuses. Typically, they interface directly with building sensors and controllers through a open source protocols like BACNet or OPC. SCADA software also provides a dashboard interface for operators to view live or historical data feeds from the sensors and an easy way for operators to change control setpoints remotely. Additionally, many offer a Historian database to store historical data values for future reference or data analysis.\\
+Generally, most SCADA software is self-contained and the features are limited to those created by the SCADA vendor. This means that advances and tools used in other building-related industries, such as EnergyPlus, are inaccessible to operators without additional training. Furthermore, the SCADA's dependence on human operators to make every control decision can cause inefficiencies in how buildings are daily operated.\\
+\subsection{Contributions}
+In this work, we use the common interface of OPC to connect EnergyPlus with any existing SCADA systems. By presenting input and output EnergyPlus values as an OPC tag structure, we make the integration significantly easier for existing SCADA systems: the digital simulated building appears as a real building to the SCADA software. Furthermore, we present an intelligent controller which can generate and execute optimal control strategies automatically. The control inputs, and the corresponding response behavior can be viewed in real time through a commercial SCADA dashboard.\\
+The integration of EnergyPlus and OPC is done through a toolbox consisting to 2 major components.
+\begin{enumerate}
+	\item pyEp- A python library which facilitates cosimulation between EnergyPlus and Python. 
+	\item EnergyPlus-OPC bridge- A service which uses pyEp and OpenOPC to allow for EnergyPlus cosimulation over the OPC protocol.
+\end{enumerate}
+These tools are released to the public on PyPi and can be installed via 
+\lstinline[language=bash]{pip install pyEp}. Documentation can be found XXXXXXX.
+
+\subsection{Related Work}
+
+\subsection{EnergyPlus-OPC integration}
+Currently, EnergyPlus supports external programs through the Building Controls Virtual Testbed (BCVTB), built on top of Ptolemy II, and the Functional Mockup Interface standard. Using BCVTB, users can couple and define data flows between various modeling and simulation programs, such as TRNSYS or Simulink. These simulation environments, while comprehensive, are still constrained by the capabilities of the software. Matlab EnergyPlus (MLE+) provided a solution to this problem, allowing end-users to directly control the progress of an EnergyPlus simulation by writing Matlab code. In recent years, Python has seen rapid growth in popularity, with many advanced open-source libraries like TensorFlow and Scikit-Learn being used in both industry and academia. pyEp connects the myriad of Python libraries with existing technologies in the Building Modeling and Simulation communities. In Section XXXX, we use the XXX library to generate building control strategies and evaluate them in closed-loop simulation.
+
+There is a funadmental disconnect between building operators that manage the day-to-day operations of running buildings, and building modelers that focus on how to more efficiently design and control buildings. The primary responsibility of a building operator is to ensure that the buildings run smoothly and that no-one is dissatisfied with the environmental conditions. Minimizing energy costs is primarily a consideration in the design phase. However, there is room for optimization regarding how buildings are run, but operators are hesitant to change from previous "tried and true" strategies that do not risk occupant discomfort. In this scenario, there is significant advantage in having access to building simulation software that can predict the effect of different control strategies on environmental conditions such as zone temperature or indoor humidity.
+The building modeling community has spent significant efforts to developing simulation programs that can accurately reflect the behavior of physical buildings. An EnergyPlus simulation can handle complex control schedules for large megawatt scale buildings and quickly output the expected thermal conditions for a full year in a short amount of computation time. Giving operators an isolated testbed to try different strategies and receive immediate feedback on their performance would allow them to run already existing buildings more efficiently and reduce energy costs.
+ 
+
+
+
+
+
+exnaple of citation: \cite{Camacho2013}
