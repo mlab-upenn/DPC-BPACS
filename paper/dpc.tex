@@ -1,34 +1,15 @@
-\section{MODEL PREDICTIVE CONTROL}
+\section{PREDICTIVE CONTROL WITH GP}
 \label{S:dpc}
 
-This section addresses the challenge of ``Computational complexity" and ``Performance guarantees" listed in Sec.~\ref{SS:practical_challenges}.
-
-Consider a black-box model given by $x_{t+1}=f(x_t,u_t,d_t)$, where $x,u,d$ represent state, input and disturbance, respectively. Depending upon the learning algorithm, $f$ is typically nonlinear, nonconvex and sometimes nondifferentiable (as is the case with regression trees and random forests) with no closed-form expression. 
-Such functional representations learned through black-box modeling may not be directly suitable for control and optimization as the optimization problem can be computationally intractable, or due to nondifferentiabilities we may have to settle with a sub-optimal solution using evolutionary algorithms. 
-In our previous work, we use \textit{separation of variables} that allows us to approximate the Random Forests as affine models in the neighborhood of a given disturbance \cite{JainCDC2017}. 
-The main drawback of this approach is that these models lead to a non-smooth input behavior. 
-Gaussian Processes overcome this problem.
-Further, GPs can generalize well using only a few samples while also providing an estimate for uncertainty in the predictions. 
-We exploit this property in the optimization to generate input trajectories with high confidence.
-
-
-%At time \(t\), given training data \(\D = (X,Y) \), we consider a different GP model for each time step \(\tau \in \{0,\dots,N-1\}\):
-% \begin{gather}
-% y_{t+\tau|t} | x_{t+\tau|t} \sim \GaussianDist{\bar{y}}{\sigma^2_y}, \\
-% x_{t}\!=\![y_{t-l}, \dots, y_{t-1}, u_{t-m}, \dots, u_t, w_{t-p}, \dots, w_{t-1}, w_t]. \nonumber
-% \end{gather}
-Given a GP model of the plant, the \emph{zero-variance} method is used to predict the plant's outputs in a horizon of $N$ time steps starting from the current time $t$, for \(\tau \in \{0,\dots,N-1\}\):
-\begin{gather}
-  \label{eq:dpc:prediction}
-y_{t+\tau} \sim \GaussianDist{\bar{y}_{t+\tau} = g_{\mathrm m}(x_{t+\tau})}{\sigma^2_{t+\tau} = g_{\mathrm v}(x_{t+\tau})}, \\
-x_{t + \tau} = [\bar y_{t+ \tau-l}, \dots, \bar y_{t+ \tau-1}, u_{t+ \tau-m}, \dots, u_{t+ \tau}, \nonumber \\
-\qquad\qquad\qquad\qquad  w_{t+ \tau-p}, \dots, w_{t+ \tau-1}, w_{t+ \tau}]\text. \nonumber
-\end{gather}
-The output at step \(t+\tau\) depends upon %\(x_{t+\tau|t}\)  which is a function of
+This section presents a data-driven predictive control approach for buildings using GPs.
+Suppose that a GP model of a building's power demand is already developed, as discussed in the previous section.
+The predicted power demand at any future time $t+\tau$ in a window of $N$ time steps starting from the current time $t$, for \(\tau \in \{0,\dots,N-1\}\), is given by Equation~\eqref{eq:dpc:prediction}.
+The output at time \(t+\tau\) depends upon %\(x_{t+\tau|t}\)  which is a function of
 the control inputs \(u_{t+\tau-m}, \dots, u_{t+\tau}\).
-We are interested in the following optimization problem with quadratic cost with \(R \succ 0\)
+We are interested in the following optimization problem %with quadratic cost with \(R \succ 0\)
 \begin{align}
-  &\minimize \sum_{\tau=0}^{N-1} (\bar{y}_{t+\tau}\!-\!y_{\mathrm{ref}})^2 \!+\! {u_{t+\tau}}^T R {u_{t+\tau}} \!+\! \lambda \sigma^2_{y,t+\tau} \label{E:mpc:generic} \\
+  &\minimize \sum_{\tau=0}^{N-1} (\bar{y}_{t+\tau} - y_{\mathrm{ref},t+\tau})^2 %\!+\! {u_{t+\tau}}^T R {u_{t+\tau}} \!+\!
+    + \lambda \sigma^2_{y,t+\tau} \label{E:mpc:generic} \\
   & 
     \begin{aligned}
       \text{subject to}\ \  & \bar{y}_{t+\tau} = \mu(x_{t+\tau}) + K_\star K^{-1} (Y - \mu(X)) \nonumber\\
@@ -39,14 +20,15 @@ We are interested in the following optimization problem with quadratic cost with
 \end{align}
 where the constraints hold for all \(\tau \in \{0,\dots,N-1\}\).
 Here, \(K_\star = [k(x_{t+\tau}, x_1), \dots, k(x_{t+\tau}, x_N)]\), \(K_{\star \star} = k(x_{t+\tau}, x_{t+\tau})\). %, and $K$ is the covariance matrix with elements \(K_{ij} = k(x_i, x_j)\).
-The last constraint is a chance constraint, which keeps the plant's output inside a given set $\mathcal{Y}$ with a given probability of at least $1 - \epsilon$.
-The hyperparameters \(\theta\) of the mean function \(\mu\) and the covariance function \(k\) are optimized while training GPs as described in Sec.~\ref{S:gp} or by experiment design in Sec.~\ref{S:oed}.
-We solve \eqref{E:mpc:generic} to compute optimal \(u_{t}^*, \dots, u_{t+N-1}^*\), apply \(u_{t}^*\) to the system and proceed to time \(t+1\).
+The signal $y_{\mathrm{ref}}$ is a reference power demand trajectory the building should follow as closely as possible.
+The last constraint is probabilistic, which states that the building's power demand must stay inside a set $\mathcal{Y}$ with a probability of at least $1 - \epsilon$.
+For instance, this constraint can control the quality of tracking the reference $y_{\mathrm{ref}}$.
+The above predictive control formulation fits demand response applications where a customer -- a building in this case -- must curtail its power demand by a certain amount from its baseline, or must track an Area Control Signal (ACS) sent from the grid operator.
 
-Although we have an analytical expressions for all the constraints in the optimization, depending upon the choice of mean and covariance functions, the optimization can be computationally hard to solve.
+We solve the optimization problem~\eqref{E:mpc:generic} to compute optimal \(u_{t}^*, \dots, u_{t+N-1}^*\), apply \(u_{t}^*\) to the system and proceed to time \(t+1\).
+Although all the constraints in \eqref{E:mpc:generic} are of analytical forms, the optimization can be computationally hard to solve due to the high nonlinearity and computational burden of the GP.
 % For the case study in Sec.~\ref{S:casestudy} we choose a combination of a squared exponential and rational quadratic kernel which results in nonconvex problem.
-We solve \eqref{E:mpc:generic} using IPOPT \cite{Waechter2009b} and CasADi \cite{Andersson2013b}.
-Our future work focuses on developing MPC based on sparse GPs which are more scalable to large scale systems.
+We use the nonlinear solver IPOPT \cite{Waechter2009b} and the optimization modeling framework CasADi \cite{Andersson2013b} to solve \eqref{E:mpc:generic}.
 
 
 %%% Local Variables:
