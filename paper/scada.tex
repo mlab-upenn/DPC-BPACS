@@ -1,36 +1,43 @@
-\section{SCADA}
+\section{DATA ACQUISITION}
 
-\subsection{Introduction}
+A Supervisory Control and Data Acquisition software is a building automation system commonly used by the building operators to manage individual buildings or a campus of buildings. 
+It interfaces directly with building sensors and controllers through open source protocols like BACNet or OPC. 
+SCADA software also provides a dashboard interface for the operators to view live or historical data feeds from the sensors and an easy way for operators to change control setpoints remotely. 
+Additionally, it may also offer a Historian database to store historical data values for future reference or data analysis.
 
-Supervisory Control and Data Acquisition software (SCADA) is a commonly found building automation system used by operators to manage individual buildings up to multi-location campuses. Typically, they interface directly with building sensors and controllers through open source protocols like BACNet or OPC. SCADA software also provides a dashboard interface for operators to view live or historical data feeds from the sensors and an easy way for operators to change control setpoints remotely. Additionally, many offer a Historian database to store historical data values for future reference or data analysis.\\
-Generally, most SCADA software is self-contained and the features are limited to those created by the SCADA vendor. This means that advances and tools used in other building-related industries, such as EnergyPlus, are inaccessible to operators without additional training. Furthermore, the SCADA's dependence on human operators to make every control decision can cause inefficiencies in how buildings are daily operated.\\
-EnergyPlus is a Department of Energy (DOE) sponsored high fidelity physics based full building simulator. It is commonly used by building designers and energy assessors for LEED Certification to predict the power consumption of a building throughout the year. An .idf file describes the physical properties of the building, from floor plan to construction materials. Typically, operating schedules are predefined in the idf file, and a simulation is run for a set time period. The outputs are stored in an external file for review and analysis. The main drawback to using EnergyPlus is that creating an idf file requires every property of the building to be described, which is both time consuming and expensive. In our previous work, we have described how data driven models can provide a cheaper alternative to using EnergyPlus. (CITE US)
-\subsection{Motivation}
-There is a fundamental disconnect between building operators that manage the day-to-day operations of running buildings, and building modelers that focus on how to more efficiently design and control buildings. The primary responsibility of a building operator is to ensure that the buildings run smoothly and that no-one is dissatisfied with the environmental conditions. Minimizing energy costs is primarily a consideration in the design phase. However, there is room for optimization regarding how buildings are run, but operators are hesitant to change from previous "tried and true" strategies that do not risk occupant discomfort. In this scenario, there is significant advantage in having access to building simulation software that can predict the effect of different control strategies on environmental conditions such as zone temperature or indoor humidity.
-The building modeling community has spent significant efforts to developing simulation programs that can accurately reflect the behavior of physical buildings. An EnergyPlus simulation can handle complex control schedules for large megawatt scale buildings and quickly output the expected thermal conditions for a full year in a short amount of computation time. This simulation capability can reduce the uncertainty of implementing newer control strategies for operators. Giving them an isolated testbed in EnergyPlus to try different strategies and receive immediate feedback on their performance would allow them to run already existing buildings more efficiently and reduce energy costs.
-This capability is also useful when new operating constraints are imposed onto the building operator, such as during a Demand Response (DR) event. During DR events, operators must reduce the power consumption of their buildings during a few peak hours or face a penalty. Being able to simulate untested strategies like precooling provides more confidence in achieving the necessary curtailment, and allows more customers to enter the DR market, boosting grid reliability and lowering electricity prices.
+There are two main challenges in designing and testing of a controller with digital twins.
+First, most SCADA software are self-contained and the features are limited to those provided by the vendor.
+Building operators cannot view the results from E+/D+ models on the same SCADA software used for real-time monitoring because it is not clear how we can communicate between the E+/D+ models and existing SCADA software to acquire the data tags required by E+/D+ models for simulation and control, and further show the generated results on the dashboards.
+Second, if the digital twin is an E+ model, we need an external library like MLE+ \cite{Nghiem2010} to design a controller in a scripting language like MATLAB. This is because EnergyPlus only allows to manually code rule-based control strategies.
 
-\subsection{Contributions}
-In this work, we use the common interface of OPC to connect EnergyPlus with any existing SCADA systems. By presenting input and output EnergyPlus values as an OPC tag structure, we make the integration significantly easier for existing SCADA systems: the digital simulated building appears as a real building to the SCADA software. This work is incorporated into a Python library, pyEp, and can be used for any EnergyPlus building. We show how this library allows for more intelligent control of buildings by presenting an intelligent controller which can generate and execute optimal control strategies automatically. The control inputs, and the corresponding digital twin response behavior can be viewed in real time through a commercial SCADA dashboard.\\
-The integration of EnergyPlus and OPC is done through a toolbox consisting to 2 major components.
-\begin{enumerate}
-	\item pyEp- A python library which facilitates cosimulation between EnergyPlus and Python. 
-	\item EnergyPlus-OPC bridge- A service which uses pyEp and OpenOPC to allow for EnergyPlus cosimulation over the OPC protocol.
-\end{enumerate}
-These tools are released to the public on PyPi and can be installed via 
-\lstinline[language=bash]{pip install pyEp}. Documentation can be found XXXXXXX.
+In this work, we use the common interface of OPC to connect EnergyPlus with any existing SCADA software for real-time data communication. 
+We call this EnergyPlus-OPC bridge.
+By representing inputs to and outputs from EnergyPlus as OPC tag structures, we make the integration significantly easier for existing SCADA software, and the digital simulated building appear as a real building to the SCADA software.
+Further, since our machine learning models are written in Python, we develop a library to interface Python and EnergyPlus -- pyEp, an equivalent of MLE+ for Python.
+We show how this library allows for intelligent control of buildings like MPC using E+/D+ models.
 
-\subsection{Related Work}
-Something about other python libraries or cosimulation or energyplus
-\subsection{pyEp}
+To summarize, E+ models cannot be used for designing advanced controllers like MPC. 
+But an interface like MLE+ (MATLAB) and pyEp (Python) allows the users to test manual control strategies more conveniently.
+D+ models, as will show in Section \ref{S:dpc}, are suitable for MPC.
+In the examples that will follow, we consider an E+ model as a real building (plant) and D+ model to design the controller.
+Therefore, the pyEp library enables to study a closed-loop response of this building.
+Finally, the EnergyPlus-OPC bridge allows us to interface the E+/D+ models to the SCADA software via the OPC protocol.
+Once the optimal setpoints are obtained from MPC, and the corresponding digital twin response behavior can be viewed in real time in a commercial SCADA dashboard.
 
+\subsection{pyEp: A Python EnergyPlus Interface}
+
+\todo[inline]{need to organize}
 Currently, EnergyPlus supports external programs through the Building Controls Virtual Testbed (BCVTB), built on top of Ptolemy II, and the Functional Mockup Interface (FMI) standard. Using BCVTB, users can couple and define data flows between various modeling and simulation programs, such as TRNSYS or Simulink. These simulation environments, while comprehensive, are still constrained by the capabilities of the software. Matlab EnergyPlus (MLE+) provided a solution to this problem, allowing end-users to directly control the progress of an EnergyPlus simulation by writing Matlab code. In recent years, Python has seen rapid growth in popularity, with many advanced open-source libraries like TensorFlow and Scikit-Learn being used in both industry and academia. pyEp connects the myriad of Python libraries with existing technologies in the building modeling and simulation communities. In Section XXXX, we use the XXX library to generate building control strategies and evaluate them in closed-loop simulation.
 
 The module is designed to be lightweight and flexible. The core class is an ep\_process, and provides simple read and write capabilities with EnergyPlus. Each ep\_process corresponds to one EnergyPlus building, and is independent of all other ep\_process. This means that idfs built for different EnergyPlus versions, or buildings with different weather files, can be run together in a campus-like co-simulation. An example using the DOE provided LargeOffice idf file is included in the installation. For an idf to be used with pyEp, it must have an ExternalInterface configured, as well as an associated variables.cfg, specifying the inputs and outputs to the ExternalInterface.
 
-\subsection{EnergyPlus-OPC integration}
+These tools are released to the public on PyPi and can be installed via 
+\texttt{pip install pyEp}. The documentation is available at XXXXXXX.
 
 \subsubsection{EnergyPlus-OPC Bridge}
+
+\todo[inline]{need to organize}
+\todo[inline]{add table with function descriptions}
 Our EnergyPlus-OPC service provides this functionality by exposing the EnergyPlus simulation input and output variables as OPC tags to be read by any OPC client. The user is able to configure the simulation for any number or type of buildings and can run each individually on different schedules. To see the simulation in progress, operators only need to view the tag, as they would any other data source. By writing to one of the input tags, operators can change the input setpoints to EnergyPlus and see the response of the building. For more comprehensive control, operators can change the EnergyPlus OPC controller, which specifies the baseline schedule.
 The service supports the running of multiple EnergyPlus instances, creating a campus of isolated buildings. The buildings are simulated sequentially, but kept at the same time, so that the first building only advances a timestep when all other buildings are at the same time. This capability can be useful when looking at aggregate power consumption and synthesizing control strategies involving multiple-building curtailment.
 \subsubsection{System Architecture}

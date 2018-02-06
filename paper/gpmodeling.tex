@@ -1,10 +1,9 @@
 \section{MODELING WITH GAUSSIAN PROCESSES}
 \label{S:gp}
 
-As mentioned earlier, conventional building modeling methods based on first principles are time-consuming and cost-prohibitive.
+Due to reasons mentioned in Section \ref{S:intro}, conventional building modeling methods based on first principles are time-consuming and cost-prohibitive.
 Data-driven modeling approaches, based on machine learning techniques, have been shown to be fast, economical, and accurate alternatives.
 This section presents a building modeling approach with Gaussian Process (GP), starting with a brief introduction to GP and its application in controls.
-
 \subsection{Introduction to Gaussian Process}
 \label{sec:gp:gp-intro}
 
@@ -86,20 +85,22 @@ Therefore, it involves uncertainty propagation through the model, which would co
 In this paper, the zero-variance method was selected for predicting future outputs in optimization formulations.
 
 
-\subsection{Modeling Building's Power Demand with GP}
+\subsection{Modeling Building's Power Demand and Zone Temperatures with Gaussian Processes}
 \label{sec:gp:bldg-modeling}
 
-Our aim is to model a building's power demand behavior from data that can be measured directly from installed sensors like thermostats, multimeters and weather forecasts.
-The following feature variables are considered:
+We use a U.S. Department of Energy’s Commercial Reference Buildings (DoE CRB) simulated in EnergyPlus as the virtual test-bed building. It is a large 12-story office building consisting of 19 zones with a total area of 498,588 sq.ft. Under peak load conditions the office can consume up to 1.4 MW of power.
+Our aim is to model a building's power demand and zone temperature behavior from data that can be measured directly from installed sensors like thermostats, multimeters and weather forecast.
+We learn two GP models -- GP model \(\mathcal{M}_1\) for predicting the power demand and GP model \(\mathcal{M}_2\) for predicting the temperature of a particular zone in the building.
+The following feature variables are used for training:
 \begin{itemize}
 \item \textit{Weather variables \(d^w\):} such as outside temperature and humidity, which are derived from historical weather data.
 \item \textit{Proxy variables \(d^p\):} such as time of day and day of week, which indicate occupancy and periodic trends.
 %\textit{Fixed schedules  \(d^s\):} kitchen cooling set point, corridor cooling set point - these set points follow predefined rules. 
-\item \textit{Control variables \(u\):} such as cooling, supply air temperature and chilled water setpoints.
-\item \textit{Output variable \(y\):} total power consumption -- this is the output of interest which we will predict using all the above features in the model.
+\item \textit{Control variables \(u\):} such as cooling, supply air temperature and chilled water setpoints -- these variables will be optimized in MPC.
+\item \textit{Output variable \(y\):} total power consumption for\(\mathcal{M}_1\) and zone temperature for \(\mathcal{M}_2\) -- this is the output of interest which we will predict using all the above features in the model.
 \end{itemize}
 
-Using these measurement data, we learn an autoregressive GP model of the building's power demand and use the zero-variance method to predict the future output \(y_{t+\tau}\), where $t$ is the current time and \( \tau \ge 0\).
+Using these measurement data, we learn autoregressive GP models \(\mathcal{M}_1\) and \(\mathcal{M}_2\), and use the zero-variance method to predict the future output \(y_{t+\tau}\), where $t$ is the current time and \( \tau \ge 0\).
 Specifically,
 \begin{gather}
 \label{eq:dpc:prediction}
@@ -112,10 +113,9 @@ It is assumed that at time \(t\), \(w_{t+\tau}\) are available \(\forall \tau \)
 For the GP, we use a constant mean function and the special covariance function proposed in our previous work \cite{nghiemetal16gp} to capture both the temporal pattern of the energy usage and the effect of non-temporal features, such as weather conditions and temperature setpoints, on the power demand.
 We optimize the hyperparameters \(\theta\) % = [\mu, k, \sigma_{f_2}, \lambda_d, \sigma_{f_3}, \alpha, \lambda] \)
 of the GP model using GPML \cite{Rasmussen2010}.
-% After training, the less important features, i.e.~features with high length scales \(\lambda_d\) are removed and the models are trained again. 
 
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:
+\begin{figure}
+	\missingfigure[figwidth=\linewidth]{Power demand and Temperature Prediction}
+	\caption{Power demand and Temperature Prediction}
+	\label{F:prediction}
+\end{figure}

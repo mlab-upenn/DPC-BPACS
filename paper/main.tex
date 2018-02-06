@@ -16,7 +16,7 @@
 % \usepackage{ccaption}
 \usepackage{mathtools}  % for special symbols such as :=
 \usepackage{xspace}
-
+\usepackage{todonotes}
 \usepackage{tikz}
 \usepackage[utf8]{inputenc}
 \usepackage{pgfplots} 
@@ -29,8 +29,6 @@
 
 \usepackage{lastpage} % for the number of the last page in the document
 \usepackage{fancyhdr}
-
-\newcommand{\todo}[1]{\textcolor{red}{\bfseries TODO: #1}}
 
 %%%%%%%%%%%%%%%%% Macros used in the paper %%%%%%%%%%%%%%%%%%%%
 
@@ -239,13 +237,13 @@
 \input{intro.tex}
 
 % --------------------------------------------------------
+\input{scada.tex}
+
+% --------------------------------------------------------
 \input{gpmodeling.tex}
 
 % --------------------------------------------------------
 \input{dpc.tex}
-
-% --------------------------------------------------------
-\input{scada.tex}
 
 % --------------------------------------------------------
 \input{conclusion.tex}
