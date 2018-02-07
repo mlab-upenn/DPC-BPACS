@@ -19,7 +19,8 @@ end
 figure; hold on; grid on;
 h1 = plot(results.(vars.reference{1}), 'LineWidth', 2);
 h2 = plot(baseline.(vars.reference{1}), '--', 'LineWidth', 2);
-legend([h1, h2], 'closed-loop', 'reference');
+h3 = plot(prediction.('ymu'), '-', 'LineWidth', 2);
+legend([h1, h2, h3], 'closed-loop', 'reference', 'prediction');
 xlabel('time')
 
 figure; hold on; grid on;
