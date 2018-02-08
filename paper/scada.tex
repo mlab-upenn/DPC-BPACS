@@ -1,56 +1,101 @@
-\section{DATA ACQUISITION}
+\section{DATA ACQUISITION \& COMMUNICATION}
 
-A Supervisory Control and Data Acquisition software is a building automation system commonly used by the building operators to manage individual buildings or a campus of buildings. 
+A Supervisory Control and Data Acquisition system is a building automation system commonly used by the operators to manage individual buildings or a campus of buildings. 
 It interfaces directly with building sensors and controllers through open source protocols like BACNet or OPC. 
 SCADA software also provides a dashboard interface for the operators to view live or historical data feeds from the sensors and an easy way for operators to change control setpoints remotely. 
-Additionally, it may also offer a Historian database to store historical data values for future reference or data analysis.
+Additionally, it may also offer a Historian database to store historical data values for future reference or data analysis. See Figure \ref{F:intro}.
 
-There are two main challenges in designing and testing of a controller with digital twins.
+There are two main limiting factors in bridging digital twins with existing SCADA software.
 First, most SCADA software are self-contained and the features are limited to those provided by the vendor.
 Building operators cannot view the results from E+/D+ models on the same SCADA software used for real-time monitoring because it is not clear how we can communicate between the E+/D+ models and existing SCADA software to acquire the data tags required by E+/D+ models for simulation and control, and further show the generated results on the dashboards.
-Second, if the digital twin is an E+ model, we need an external library like MLE+ \cite{Nghiem2010} to design a controller in a scripting language like MATLAB. This is because EnergyPlus only allows to manually code rule-based control strategies.
+Second, if the digital twin is an E+ model, we need an external library like MATLAB EnergyPlus or MLE+ \cite{Nghiem2010} to design a controller in a scripting language like MATLAB. This is because EnergyPlus only allows to manually code rule-based control strategies.
+Since Python is favorable for machine learning in general, we need an alternative to MLE+ for Python. 
 
 In this work, we use the common interface of OPC to connect EnergyPlus with any existing SCADA software for real-time data communication. 
 We call this EnergyPlus-OPC bridge.
 By representing inputs to and outputs from EnergyPlus as OPC tag structures, we make the integration significantly easier for existing SCADA software, and the digital simulated building appear as a real building to the SCADA software.
 Further, since our machine learning models are written in Python, we develop a library to interface Python and EnergyPlus -- pyEp, an equivalent of MLE+ for Python.
-We show how this library allows for intelligent control of buildings like MPC using E+/D+ models.
+We show how this library allows for intelligent control of buildings like MPC using D+ models for testing on E+ models.
 
-To summarize, E+ models cannot be used for designing advanced controllers like MPC. 
+In summary, E+ models cannot be used for designing advanced controllers like MPC. 
 But an interface like MLE+ (MATLAB) and pyEp (Python) allows the users to test manual control strategies more conveniently.
-D+ models, as will show in Section \ref{S:dpc}, are suitable for MPC.
-In the examples that will follow, we consider an E+ model as a real building (plant) and D+ model to design the controller.
-Therefore, the pyEp library enables to study a closed-loop response of this building.
-Finally, the EnergyPlus-OPC bridge allows us to interface the E+/D+ models to the SCADA software via the OPC protocol.
+On the other hand, as we show in Section \ref{S:dpc}, D+ models, are suitable for MPC.
+In the examples that will follow, we will test a controller based on a D+ model on an E+ model as a plant (substitute for a real building).
+This setup is shown in Figure \ref{F:control}.
+The EnergyPlus OPC bridge allows us to interface the E+/D+ models to the SCADA software and enables to study a closed-loop response of this building.
 Once the optimal setpoints are obtained from MPC, and the corresponding digital twin response behavior can be viewed in real time in a commercial SCADA dashboard.
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.4\textwidth]{images/control.eps}
+	\caption{The MPC controller runs in Python using the D+ models and applies the optimal inputs to the E+ model. The communication is made possible using the pyEp library and the OPC connection.}
+	\label{F:control}
+\end{figure}
+
+\subsubsection{EnergyPlus OPC Bridge}
+
+Our EnergyPlus OPC bridge provides the EnergyPlus input and output variables as OPC tags to be read by any OPC client.
+The user is able to configure the simulation for any number or type of buildings and can run each individually on different schedules.
+To see the simulation in progress, the operators only need to view the tag, as they would for any other data source.
+By writing to one of the input tags, the operators can change the input setpoints to EnergyPlus and see the response of the building.
+For more comprehensive control, the operators can use our MPC controller based on D+ models.
+The service supports the running of multiple EnergyPlus instances, creating a campus of isolated buildings.
+The buildings are simulated sequentially, but kept at the same time, so that the first building only advances a time step when all other buildings are at the same time.
+This capability can be useful when looking at aggregate power consumption and synthesizing control strategies involving multiple-building curtailment.
+For communication between EnergyPlus and Python we use pyEp.
 
 \subsection{pyEp: A Python EnergyPlus Interface}
 
-\todo[inline]{need to organize}
-Currently, EnergyPlus supports external programs through the Building Controls Virtual Testbed (BCVTB), built on top of Ptolemy II, and the Functional Mockup Interface (FMI) standard. Using BCVTB, users can couple and define data flows between various modeling and simulation programs, such as TRNSYS or Simulink. These simulation environments, while comprehensive, are still constrained by the capabilities of the software. Matlab EnergyPlus (MLE+) provided a solution to this problem, allowing end-users to directly control the progress of an EnergyPlus simulation by writing Matlab code. In recent years, Python has seen rapid growth in popularity, with many advanced open-source libraries like TensorFlow and Scikit-Learn being used in both industry and academia. pyEp connects the myriad of Python libraries with existing technologies in the building modeling and simulation communities. In Section XXXX, we use the XXX library to generate building control strategies and evaluate them in closed-loop simulation.
+Currently, EnergyPlus supports external programs through the Building Controls Virtual Testbed (BCVTB), built on top of Ptolemy II, and the Functional Mockup Interface (FMI) standard. 
+Using BCVTB, the users can couple and define data flows between various modeling and simulation programs, such as TRNSYS or Simulink. 
+These simulation environments, while comprehensive, are still constrained by the capabilities of the software. 
+MLE+ provides a solution to this problem, allowing the end-users to directly control the progress of an EnergyPlus simulation by writing MATLAB code. 
+In recent years, Python is considered to be the favorite in the machine learning community with many advanced open-source libraries like TensorFlow \cite{Abadid} and Scikit-learn \cite{Pedregosa2011} being used widely in industry and academia.
+The pyEp library connects the myriad of Python libraries with existing technologies in the building modeling and simulation communities. 
+In Figure \ref{F:control}, we use Gaussian Processes to learn D+ models (details in Section \ref{S:gp}), synthesize building control strategies (details in Section \ref{S:dpc}) and evaluate them in closed-loop simulation using an E+ model. 
+This communication has been made possible with the pyEp library.
 
-The module is designed to be lightweight and flexible. The core class is an ep\_process, and provides simple read and write capabilities with EnergyPlus. Each ep\_process corresponds to one EnergyPlus building, and is independent of all other ep\_process. This means that idfs built for different EnergyPlus versions, or buildings with different weather files, can be run together in a campus-like co-simulation. An example using the DOE provided LargeOffice idf file is included in the installation. For an idf to be used with pyEp, it must have an ExternalInterface configured, as well as an associated variables.cfg, specifying the inputs and outputs to the ExternalInterface.
+The library is designed to be lightweight and flexible. 
+The core class is an \(\mathtt{ep\_process}\), and provides simple read and write capabilities with EnergyPlus. 
+Each \(\mathtt{ep\_process}\) corresponds to one EnergyPlus building, and is independent of all other ep\_process. 
+This means that \(\mathtt{idf}\) files (format specific to EnergyPlus) built for different EnergyPlus versions, or buildings with different weather files, can be run together in a campus-like co-simulation. 
+An example using the Department of Energy (DoE) provided LargeOffice building is included in the installation. 
+For an \(\mathtt{idf}\) to be used with pyEp, it must have an \(\mathtt{ExternalInterface}\) configured, as well as an associated \(\mathtt{variables.cfg}\), specifying the inputs and outputs to the \(\mathtt{ExternalInterface}\).
+These tools are available on the Python Package Index (PyPI) and can be installed via \(\mathtt{pip \ install \ pyEp}\). The documentation is available at \url{https://github.com/mlab-upenn/pyEp}.
 
-These tools are released to the public on PyPi and can be installed via 
-\texttt{pip install pyEp}. The documentation is available at XXXXXXX.
-
-\subsubsection{EnergyPlus-OPC Bridge}
-
-\todo[inline]{need to organize}
-\todo[inline]{add table with function descriptions}
-Our EnergyPlus-OPC service provides this functionality by exposing the EnergyPlus simulation input and output variables as OPC tags to be read by any OPC client. The user is able to configure the simulation for any number or type of buildings and can run each individually on different schedules. To see the simulation in progress, operators only need to view the tag, as they would any other data source. By writing to one of the input tags, operators can change the input setpoints to EnergyPlus and see the response of the building. For more comprehensive control, operators can change the EnergyPlus OPC controller, which specifies the baseline schedule.
-The service supports the running of multiple EnergyPlus instances, creating a campus of isolated buildings. The buildings are simulated sequentially, but kept at the same time, so that the first building only advances a timestep when all other buildings are at the same time. This capability can be useful when looking at aggregate power consumption and synthesizing control strategies involving multiple-building curtailment.
 \subsubsection{System Architecture}
 
-The EnergyPlus-OPC bridge service requires two processes to start and control a simulation. The first is the bridge itself, which can be started once and left in the background indefinitely. The second is a controller, which determines which setpoints to write to the bridge at what time during the simulation. The role of the bridge is to handle communication between EnergyPlus and the OPC server. The role of the controller is to control the inputs at every time step of the EnergyPlus co-simulation.
-For a simulation timestep $t$, the bridge first writes the outputs from EnergyPlus from the previous timestep $t-1$. The controller then reads the outputs and uses them to determine the next set of inputs to write to the EnergyPlus input tags. For a controller running on a fixed schedule, it would use the simulation time to determine what setpoints to write. A more energy-savings focused controller might use the current power consumption to determine if a curtailment strategy should be implemented instead. After the controller determines the setpoints that should be sent to EnergyPlus and writes them to the input OPC tags, the bridge reads them and passes them into EnergyPlus. The same process follows for the next building, until all have been incremented forward by one timestep.
-The communication protocol ensures that every input and output are read to the correct EnergyPlus building, and that delays in the network communications do not cause the controller and bridge to become out-of-sync with each other. The exchange of information is not real-time dependent, so human operators can change inputs timestep by timestep at any pace. 
-The controller can also preemptively stop a simulation by terminating the controller process. Changes to the schedule can be made, and the simulation restarted again without needing to restart the bridge process. This allows for easier changes and less time overhead between simulation runs. Specific syntax can be found in the documentation. The bridge should only be restarted if different EnergyPlus buildings need to be used.
-This bridge-controller design provides great flexibility in how the user can make use of EnergyPlus. Users can freely modify the controller to customize the simulation parameters. A simple schedule based controller monitoring power consumption can be made with basic knowledge of Python. Alternatively, more complex model based in-the-loop controllers can also be implemented and evaluated. 2 example controllers are included in the pyEp library. The first controller implements a setpoint schedule in Python and shows how to read/write from the controller to EnergyPlus. The second controller implements a setpoint schedule based off a formatted csv file. No knowledge of Python is needed to edit and run a custom setpoint schedule.
+The EnergyPlus OPC bridge service requires two processes to start and control a simulation. 
+The first is the bridge itself, which can be started once and left in the background indefinitely. 
+The second is a controller, which determines which setpoints to write to the bridge at what time during the simulation. 
+The role of the bridge is to handle communication between EnergyPlus and the OPC server. 
+The role of the controller is to control the inputs at every time step of the EnergyPlus co-simulation.
+At time step $t$, the bridge first writes the outputs from EnergyPlus at the previous time step $t-1$. 
+The controller then reads the outputs and uses them to determine the next set of inputs to write to the EnergyPlus input tags. 
+%For a controller running on a fixed schedule, it would use the simulation time to determine what setpoints to write. 
+%A more energy-savings focused controller might use the current power consumption to determine if a curtailment strategy should be implemented instead. 
+After the controller writes them to the input OPC tags, the bridge reads them and passes them into EnergyPlus. 
+The same process follows for the next building, until all have been incremented forward by one time step.
+The communication protocol ensures that every input and output are read to the correct EnergyPlus building, and that delays in the network communications do not cause the controller and bridge to become out-of-sync with each other. 
+The exchange of information is not real-time dependent, so human operators can change the inputs time step by time step at any pace. 
+The controller can also preemptively stop a simulation by terminating the controller process. 
+Changes to a prescribed schedule can also be made, and the simulation restarted again without needing to restart the bridge process. 
+This allows for easier changes and less time overhead between simulation runs.
+Specific syntax can be found in the documentation. 
+The bridge should only be restarted if different EnergyPlus buildings need to be used.
+
+This bridge-controller design provides great flexibility in how the user can make use of EnergyPlus. 
+Users can freely modify the controller to customize the simulation parameters. 
+A simple schedule based controller monitoring power consumption can be made with basic knowledge of Python. 
+Alternatively, more complex model-based controllers like MPC as in Section \ref{S:dpc} can also be implemented and evaluated.
+Two example controllers are included in the pyEp library. 
+The first controller implements a setpoint schedule in Python and shows how to read/write from the controller to EnergyPlus. 
+The second controller implements a setpoint schedule based on a formatted csv file. 
+%No knowledge of Python is needed to edit and run a custom setpoint schedule.
+
 \subsubsection{Requirements}
-The provided controllers use the OpenOPC library to connect to an OPC server, but other methodologies may be used if the communications paradigm is followed (see pyEp documentation for more details). Additionally, the free Matrikon OPC Server Simulator is used as the default server. Included with pyEp is a server configuration XML generator that automatically creates the correct OPC Tree Tag structure for the Matrikon Server. The pyEp core module, linking EnergyPlus to Python, is supported for Python 2.7 and 3.x, while the EnergyPlus-OPC bridge requires Python 2.7.
 
-
-
-
-exnaple of citation: \cite{Camacho2013}
+The provided controllers use the OpenOPC library to connect to an OPC server, but other methodologies may be used if the communications paradigm is followed. See pyEp documentation for more details.
+Additionally, the free Matrikon OPC Server Simulator is used as the default server.
+Included with pyEp is a server configuration XML generator that automatically creates the correct OPC Tree Tag structure for the Matrikon Server. 
+The pyEp core module, linking EnergyPlus to Python, is supported for Python 2.7 and 3.x, while the EnergyPlus OPC bridge requires Python 2.7.

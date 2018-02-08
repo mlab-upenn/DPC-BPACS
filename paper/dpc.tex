@@ -9,6 +9,13 @@ the control inputs \(u_{t+\tau-m}, \dots, u_{t+\tau}\).
 We next show the flexibility of using these models in different applications.
 
 \subsection{Demand Tracking Control}
+
+\begin{figure*}[t]
+	\includegraphics[width=\linewidth]{images/Dashboard-PowerTrack.png}
+	\caption{Demand Tracking Control}
+	\label{F:tracking}
+\end{figure*}
+
 This predictive control formulation fits demand response applications where a customer -- a building in this case -- must curtail its power demand by a certain amount from its baseline, or must track an Area Control Signal (ACS) sent from the grid operator.
 For Demand Tracking Control we only require GP model \(\mathcal{M}_1\).
 We are interested in solving the following optimization problem
@@ -33,13 +40,13 @@ Although all the constraints in \eqref{E:mpc:tracking} are of analytical forms, 
 % For the case study in Sec.~\ref{S:casestudy} we choose a combination of a squared exponential and rational quadratic kernel which results in nonconvex problem.
 We use the nonlinear solver IPOPT \cite{Waechter2009b} and the optimization modeling framework CasADi \cite{Andersson2013b} to solve \eqref{E:mpc:tracking}.
 
-\begin{figure}
-	\missingfigure[figwidth=\linewidth]{Demand Tracking Control}
-	\caption{Demand Tracking Control}
-	\label{F:tracking}
-\end{figure}
-
 \subsection{Climate Control with Minimum Energy Usage}
+
+\begin{figure*}[t]
+	\includegraphics[width=\linewidth]{images/Dashboard-DR.png}
+	\caption{Climate Control}
+	\label{F:climate}
+\end{figure*}
 
 Other interesting objective for energy management is of minimizing energy usage while meeting thermal comfort constaints. In this example, we require both GP models \(\mathcal{M}_1\) and \(\mathcal{M}_2\).
 Specifically, the model \(\mathcal{M}_2\) is used to enforce thermal comfort constraints in the optimization problem below:
@@ -63,8 +70,3 @@ Here, \(\bar{y},\sigma^2_{y}\) denote the mean and variance of the GP \(\mathcal
 The goal is to optimize the inputs \(u\) that minimize the power consumption while maintaining thermal comfort with high probability. 
 We again solve the optimization problem~\eqref{E:mpc:climate} to compute optimal \(u_{t}^*, \dots, u_{t+N-1}^*\), apply \(u_{t}^*\) to the system and proceed to time \(t+1\).
 
-\begin{figure}
-	\missingfigure[figwidth=\linewidth]{Climate Control}
-	\caption{Climate Control}
-	\label{F:climate}
-\end{figure}

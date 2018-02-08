@@ -17,18 +17,18 @@ We take an alternative route to the physics-based approach, i.e.~\textit{black b
 Our approach reduces the cost and time to model the buildings by an order of magnitude \cite{JainICCPS2018,JainCDC2017,JainACC2017,nghiemetal16gp,behletal15dradvisor}.
 We learn data-driven (D+) models using only historical data available via sensors already installed in the buildings -- thermostats, multimeters -- and historical weather data.
 The D+ models can not only be used for prediction but also for real-time MPC.
-These models are scalable and integrate seamlessly to the existing Supervisory Control and Data Acquisition (SCADA) software or the Building Energy Management Systems (BEMS).
+These models are scalable and integrate seamlessly to the existing Supervisory Control and Data Acquisition (SCADA) systems  or the Building Energy Management Systems (BEMS).
 
 Although expensive to build, the E+ models are useful to simulate the behavior of the building. For example, building operators use E+ as an isolated testbed to analyze different control strategies and receive immediate feedback without having to implement the strategies on the real building.
-The drawback of E+ models is that they cannot be used for MPC.
-On the other hand, as we will show, the D+ models are much less expensive to build and they can be used for simulating the response of the real building as well as for real-time MPC.
+The drawback of E+ models is that they cannot be used for advanced control like MPC.
+On the other hand, as we show in Section \ref{sec:gp:bldg-modeling}, the D+ models are much less expensive to build and they can be used for simulating the response of the real building as well as for real-time MPC.
+While the D+ models for control is a novel approach in its own right, even the use of E+ is limited in practice because of lack of integration with existing SCADA systems.
 
-\todo[inline]{what is wrong with current SCADA?}
-\begin{figure}
-	\missingfigure[figwidth=\linewidth]{problem setup}
-	\caption{Problem setup}
+In this paper, we present an end-to-end architecture for efficient modeling and HVAC control of large scale buildings using machine learning, see Figure \ref{F:intro}. 
+We explain and demonstrate with examples our complete pipeline starting from tools for data acquisition from existing SCADA/BEMS to learning accurate control-oriented data-driven D+ models using Gaussian Processes (GP) to using D+ models for real-time predictive control with high confidence.
+
+\begin{figure}[t]
+	\includegraphics[width=0.5\textwidth]{images/overview.png}
+	\caption{A typical architecture of a SCADA system working with a real building is shown in black, and our contributions in blue. We use an EnergyPlus OPC bridge that connects E+ models to the SCADA system through a simulated OPC server. We design a predictive controller using D+ models learned from the historical data obtained from a Historian database. For testing the controller with E+ models, the controller communicates via the OPC server. For testing the controller on a real building, secure and direct communication with SCADA is possible.}
 	\label{F:intro}
 \end{figure}
-
-In this paper, we present an end-to-end architecture for modeling and HVAC control of large scale buildings efficiently using machine learning, see Figure \ref{F:intro}. 
-We explain and demonstrate with examples our complete pipeline starting from tools for data acquisition from existing SCADA/BEMS to learning accurate control-oriented data-driven models using Gaussian Processes (GP) to real-time predictive control with high confidence.
