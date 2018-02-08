@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Grid Background="#FFFFFFFF" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:iwm="clr-namespace:Ico.Windows.Media;assembly=IcoWPF" xmlns:gwx="clr-namespace:Ico.Gwx;assembly=GwxRuntimeCore" xmlns:script="clr-namespace:Ico.Script;assembly=IcoScriptEngine" xmlns:ic="clr-namespace:Ico.Collections;assembly=IcoCollections" xmlns:it="clr-namespace:Ico.Twx;assembly=TwxViewControl" xmlns:iws="clr-namespace:Ico.WPF.Specialized;assembly=IcoWPFSpecialized" xmlns:iwc="clr-namespace:Ico.Windows.Controls;assembly=IcoWPF">
+  <Grid.ColumnDefinitions>
+    <ColumnDefinition />
+  </Grid.ColumnDefinitions>
+  <Grid.RowDefinitions>
+    <RowDefinition />
+  </Grid.RowDefinitions>
+  <Grid.Resources>
+    <BitmapImage x:Key="GwxThumbnailImageKey">
+      <iwm:BitmapImageInfo.StreamSource>
+        <iwm:Base64Stream Data="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" />
+      </iwm:BitmapImageInfo.StreamSource>
+    </BitmapImage>
+  </Grid.Resources>
+  <gwx:GwxDocument.GwxDocument>
+    <gwx:GwxDocument FileVersion="10.95.200.00" ScanRate="500">
+      <gwx:GwxDocument.ScriptCodeManager>
+        <script:ScriptCodeManager>
+          <script:ScriptCodeManager.AssemblyReferences>
+            <ic:AssemblyReference AssemblyName="mscorlib" />
+            <ic:AssemblyReference AssemblyName="System" />
+            <ic:AssemblyReference AssemblyName="System.Core" />
+            <ic:AssemblyReference AssemblyName="System.Data" />
+            <ic:AssemblyReference AssemblyName="System.Xml" />
+            <ic:AssemblyReference AssemblyName="System.Drawing" />
+            <ic:AssemblyReference AssemblyName="System.Windows.Forms" />
+            <ic:AssemblyReference AssemblyName="WindowsBase" />
+            <ic:AssemblyReference AssemblyName="PresentationCore" />
+            <ic:AssemblyReference AssemblyName="PresentationFramework" />
+            <ic:AssemblyReference AssemblyName="GwxRuntimeCore" />
+            <ic:AssemblyReference AssemblyName="GwxRuntimeCoreCommands" />
+            <ic:AssemblyReference AssemblyName="GwxRuntimeViewControl" />
+            <ic:AssemblyReference AssemblyName="GwxConfigCore" />
+            <ic:AssemblyReference AssemblyName="IcoComponentModel" />
+            <ic:AssemblyReference AssemblyName="IcoFwxClientWrapper" />
+            <ic:AssemblyReference AssemblyName="TwxViewControl" AssemblyCodebase="file:///C:/Program Files/ICONICS/GENESIS64/Components/TwxViewControl.DLL" />
+            <ic:AssemblyReference AssemblyName="IcoWPFSpecialized" AssemblyCodebase="file:///C:/Program Files/ICONICS/GENESIS64/Components/IcoWPFSpecialized.DLL" />
+          </script:ScriptCodeManager.AssemblyReferences>
+        </script:ScriptCodeManager>
+      </gwx:GwxDocument.ScriptCodeManager>
+    </gwx:GwxDocument>
+  </gwx:GwxDocument.GwxDocument>
+  <it:TwxViewControl FileVersion="10.95.200.00" ToolBarVisibility="Visible" FontFamily="Segoe UI" FontSize="12" Width="534.333333" Height="357.666667" AllowDrop="True" Visibility="Collapsed">
+    <it:TwxViewControl.Items>
+      <iwc:MultipleTabItem IsSelected="True" Header="Tab">
+        <it:TwxChartComponent ShowAxes="True" LegendHeaderBorder="#FFAAAAAA" LegendHeaderForeground="#FF000000" LegendHeaderBackground="#FFDDDDDD" LegendActiveSelectionBackground="#883399FF" LegendActiveSelectionForeground="#FFFFFFFF" LegendInactiveSelectionBackground="#88EEEEEE" LegendInactiveSelectionForeground="#FF333333" LegendRowBackground="{x:Null}" LegendRowForeground="#FF000000" LegendBackground="#FFFFFFFF" VerticalGridLines="#FFDDDDDD" HorizontalGridLines="#FFDDDDDD" ShowLegend="True" Title="ChartView" ChartBackground="#FFFFFFFF" ChartInnerBackground="#FFFFFFFF" ChartInnerBorder="#FF000000" SplitterColor="#FFF2F2F2" CursorWidth="3" CursorStroke="#883399FF" SecondCursorStroke="#88F79646" ShowCursorInFreezeMode="True" GridXStroke="#FFAAAAAA" GridYStroke="#FFAAAAAA" SummaryTrendPeriodAlignment="Day" SummaryTrendPeriodValue="3" SummaryChartWidth="100" SummaryCursorStroke="#88444444" SummaryCursorFill="#88CCCCCC" ShowSummaryScrollbar="False" TrendPeriod="1.23:45:00" RefreshRateAlignment="Second" SamplingIntervalAlignment="Second" HistoryRefreshRateAlignment="Second" HistoryRefreshRateValue="5" RangeMinimumMode="Manual" RangeMaximumMode="AutoScale" IsGlobalRangeEnabled="True" ManualRangeMaximumTag="500000" IsZoomModeEnabled="False" ZoomFill="#883399FF" FontStyle="Normal" FontWeight="Normal">
+          <it:TwxChartComponent.SummaryTrendAxis>
+            <it:TwxAxis MajorTickmarks="3" LabelForeground="#FF000000" />
+          </it:TwxChartComponent.SummaryTrendAxis>
+          <it:TwxChartComponent.Series>
+            <it:TwxSeries Settings="{x:Null}">
+              <it:TwxSeries.Pens>
+                <it:TwxChartPen Name="Base" DataSource="hh:\Configuration\EnergyPlus:BaselinePower" ConnectionParameters="version=2;usagetype=2;" Description="" Stroke="#FFAD7B27" Fill="#FFE6C58E" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+                <it:TwxChartPen Name="Actual" DataSource="hh:\Configuration\EnergyPlus:ActualPower" ConnectionParameters="version=2;usagetype=2;" Stroke="#FFAD278C" Fill="#FFE68ED0" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+                <it:TwxChartPen Name="UConf" DataSource="hh:\Configuration\EnergyPlus:UpperConfidence" ConnectionParameters="version=2;usagetype=2;" Stroke="#FF276AAD" Fill="#FF8EBAE6" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+                <it:TwxChartPen Name="LConf" DataSource="hh:\Configuration\EnergyPlus:LowConfidence" ConnectionParameters="version=2;usagetype=2;" Stroke="#FFB32225" Fill="#FFE98B8D" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+              </it:TwxSeries.Pens>
+            </it:TwxSeries>
+          </it:TwxChartComponent.Series>
+          <it:TwxChartComponent.ChartAreaPenContextMenu>
+            <it:TwxContextMenuAction Type="AddAnnotation" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="AddSample" />
+            <it:TwxContextMenuAction Type="EditSample" />
+            <it:TwxContextMenuAction Type="DeleteSample" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="SwitchTrendPlot" />
+          </it:TwxChartComponent.ChartAreaPenContextMenu>
+          <it:TwxChartComponent.LegendAreaPenContextMenu>
+            <it:TwxContextMenuAction Type="AddAnnotation" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="AddSample" />
+            <it:TwxContextMenuAction Type="EditSample" />
+            <it:TwxContextMenuAction Type="DeleteSample" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="SwitchTrendPlot" />
+          </it:TwxChartComponent.LegendAreaPenContextMenu>
+        </it:TwxChartComponent>
+      </iwc:MultipleTabItem>
+    </it:TwxViewControl.Items>
+  </it:TwxViewControl>
+  <it:TwxViewControl FileVersion="10.95.200.00" FontFamily="Segoe UI" FontSize="12" Width="414.333333" Height="284.333334" AllowDrop="True" Visibility="Collapsed">
+    <it:TwxViewControl.Items>
+      <iwc:MultipleTabItem IsSelected="True" Header="Tab">
+        <it:TwxChartComponent LegendHeaderBorder="#FFAAAAAA" LegendHeaderForeground="#FF000000" LegendHeaderBackground="#FFDDDDDD" LegendActiveSelectionBackground="#883399FF" LegendActiveSelectionForeground="#FFFFFFFF" LegendInactiveSelectionBackground="#88EEEEEE" LegendInactiveSelectionForeground="#FF333333" LegendRowBackground="{x:Null}" LegendRowForeground="#FF000000" LegendBackground="#FFFFFFFF" VerticalGridLines="#FFDDDDDD" HorizontalGridLines="#FFDDDDDD" ShowLegend="True" Title="ChartView" ChartBackground="#FFFFFFFF" ChartInnerBackground="#FFFFFFFF" ChartInnerBorder="#FF000000" SplitterColor="#FFF2F2F2" CursorWidth="3" CursorStroke="#883399FF" SecondCursorStroke="#88F79646" ShowCursorInFreezeMode="True" GridXStroke="#FFAAAAAA" GridYStroke="#FFAAAAAA" SummaryTrendPeriodAlignment="Day" SummaryTrendPeriodValue="3" SummaryChartWidth="100" SummaryCursorStroke="#88444444" SummaryCursorFill="#88CCCCCC" ShowSummaryScrollbar="False" TrendPeriod="2.23:45:00" RefreshRateAlignment="Second" SamplingIntervalAlignment="Second" HistoryRefreshRateAlignment="Second" HistoryRefreshRateValue="5" RangeMinimumMode="Manual" RangeMaximumMode="Manual" IsGlobalRangeEnabled="True" ManualRangeMaximumTag="30" ZoomFill="#883399FF" FontStyle="Normal" FontWeight="Normal">
+          <it:TwxChartComponent.SummaryTrendAxis>
+            <it:TwxAxis MajorTickmarks="3" LabelForeground="#FF000000" />
+          </it:TwxChartComponent.SummaryTrendAxis>
+          <it:TwxChartComponent.Series>
+            <it:TwxSeries Settings="{x:Null}">
+              <it:TwxSeries.Pens>
+                <it:TwxChartPen Name="CW" DataSource="hh:\Configuration\EnergyPlus:ChilledWaterSP" ConnectionParameters="version=2;usagetype=2;" Stroke="#FFAD7B27" Fill="#FFE6C58E" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+                <it:TwxChartPen Name="CLG" DataSource="hh:\Configuration\EnergyPlus:CoolingSP" ConnectionParameters="version=2;usagetype=2;" Description="" Units="" Stroke="#FFAD278C" Fill="#FFE68ED0" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+                <it:TwxChartPen Name="SA" DataSource="hh:\Configuration\EnergyPlus:SupplyAirSP" ConnectionParameters="version=2;usagetype=2;" Stroke="#FF276AAD" Fill="#FF8EBAE6" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+              </it:TwxSeries.Pens>
+            </it:TwxSeries>
+          </it:TwxChartComponent.Series>
+          <it:TwxChartComponent.ChartAreaPenContextMenu>
+            <it:TwxContextMenuAction Type="AddAnnotation" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="AddSample" />
+            <it:TwxContextMenuAction Type="EditSample" />
+            <it:TwxContextMenuAction Type="DeleteSample" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="SwitchTrendPlot" />
+          </it:TwxChartComponent.ChartAreaPenContextMenu>
+          <it:TwxChartComponent.LegendAreaPenContextMenu>
+            <it:TwxContextMenuAction Type="AddAnnotation" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="AddSample" />
+            <it:TwxContextMenuAction Type="EditSample" />
+            <it:TwxContextMenuAction Type="DeleteSample" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="SwitchTrendPlot" />
+          </it:TwxChartComponent.LegendAreaPenContextMenu>
+        </it:TwxChartComponent>
+      </iwc:MultipleTabItem>
+    </it:TwxViewControl.Items>
+  </it:TwxViewControl>
+  <it:TwxViewControl FileVersion="10.95.200.00" FontFamily="Segoe UI" FontSize="12" Width="319" Height="269" AllowDrop="True">
+    <it:TwxViewControl.Items>
+      <iwc:MultipleTabItem IsSelected="True" Header="Tab">
+        <it:TwxChartComponent LegendHeaderBorder="#FFAAAAAA" LegendHeaderForeground="#FF000000" LegendHeaderBackground="#FFDDDDDD" LegendActiveSelectionBackground="#883399FF" LegendActiveSelectionForeground="#FFFFFFFF" LegendInactiveSelectionBackground="#88EEEEEE" LegendInactiveSelectionForeground="#FF333333" LegendRowBackground="{x:Null}" LegendRowForeground="#FF000000" LegendBackground="#FFFFFFFF" VerticalGridLines="#FFDDDDDD" HorizontalGridLines="#FFDDDDDD" Title="ChartView" ChartBackground="#FFFFFFFF" ChartInnerBackground="#FFFFFFFF" ChartInnerBorder="#FF000000" SplitterColor="#FFF2F2F2" CursorWidth="3" CursorStroke="#883399FF" SecondCursorStroke="#88F79646" ShowCursorInFreezeMode="True" GridXStroke="#FFAAAAAA" GridYStroke="#FFAAAAAA" SummaryTrendPeriodAlignment="Day" SummaryTrendPeriodValue="3" SummaryChartWidth="100" SummaryCursorStroke="#88444444" SummaryCursorFill="#88CCCCCC" ShowSummaryScrollbar="False" TrendPeriod="2.22:43:48.8390000" RefreshRateAlignment="Second" SamplingIntervalAlignment="Second" HistoryRefreshRateAlignment="Second" HistoryRefreshRateValue="5" RangeMinimumMode="Manual" RangeMaximumMode="Manual" IsGlobalRangeEnabled="True" ManualRangeMaximumTag="30" ZoomFill="#883399FF" FontStyle="Normal" FontWeight="Normal">
+          <it:TwxChartComponent.SummaryTrendAxis>
+            <it:TwxAxis MajorTickmarks="3" LabelForeground="#FF000000" />
+          </it:TwxChartComponent.SummaryTrendAxis>
+          <it:TwxChartComponent.Series>
+            <it:TwxSeries Settings="{x:Null}">
+              <it:TwxSeries.Pens>
+                <it:TwxChartPen Name="Mid" DataSource="hh:\Configuration\EnergyPlus:TempMid" ConnectionParameters="version=2;usagetype=2;" Stroke="#FFB32225" Fill="#FFE98B8D" BadQualityStroke="{x:Null}" BadQualityFill="{x:Null}" TotalizerEngineeringUnits="{x:Null}" />
+              </it:TwxSeries.Pens>
+            </it:TwxSeries>
+          </it:TwxChartComponent.Series>
+          <it:TwxChartComponent.ChartAreaPenContextMenu>
+            <it:TwxContextMenuAction Type="AddAnnotation" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="AddSample" />
+            <it:TwxContextMenuAction Type="EditSample" />
+            <it:TwxContextMenuAction Type="DeleteSample" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="SwitchTrendPlot" />
+          </it:TwxChartComponent.ChartAreaPenContextMenu>
+          <it:TwxChartComponent.LegendAreaPenContextMenu>
+            <it:TwxContextMenuAction Type="AddAnnotation" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="AddSample" />
+            <it:TwxContextMenuAction Type="EditSample" />
+            <it:TwxContextMenuAction Type="DeleteSample" />
+            <it:TwxContextMenuAction />
+            <it:TwxContextMenuAction Type="SwitchTrendPlot" />
+          </it:TwxChartComponent.LegendAreaPenContextMenu>
+        </it:TwxChartComponent>
+      </iwc:MultipleTabItem>
+    </it:TwxViewControl.Items>
+  </it:TwxViewControl>
+</Grid>
