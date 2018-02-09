@@ -1,7 +1,7 @@
 \section{MODELING WITH GAUSSIAN PROCESSES}
 \label{S:gp}
 
-Due to reasons mentioned in Section \ref{S:intro}, conventional building modeling methods based on first principles are time-consuming and cost-prohibitive.
+As discussed in the Introduction section, conventional building modeling methods based on first principles are time-consuming and cost-prohibitive.
 Data-driven modeling approaches, based on machine learning techniques, have been shown to be fast, economical, and accurate alternatives.
 This section presents a building modeling approach with Gaussian Process (GP), starting with a brief introduction to GP and its application in controls.
 \subsection{Introduction to Gaussian Process}
@@ -88,9 +88,9 @@ In this paper, the zero-variance method was selected for predicting future outpu
 \subsection{Modeling Building's Power Demand and Zone Temperatures with Gaussian Processes}
 \label{sec:gp:bldg-modeling}
 
-We use a U.S. Department of Energy’s Commercial Reference Buildings (DoE CRB) simulated in EnergyPlus as the virtual test-bed building. It is a large 12-story office building consisting of 19 zones with a total area of 498,588 sq.ft. Under peak load conditions the office can consume up to 1.4 MW of power.
-Our aim is to model a building's power demand and zone temperature behavior from data that can be measured directly from installed sensors like thermostats, multimeters and weather forecast.
-We learn two GP models -- GP model \(\mathcal{M}_1\) for predicting the power demand and GP model \(\mathcal{M}_2\) for predicting the temperature of a particular zone in the building.
+We use a U.S. Department of Energy’s Commercial Reference Building (DoE CRB) simulated in EnergyPlus as the virtual test-bed building. It is a large 12-story office building consisting of 19 zones with a total area of 498,588 sq.ft. Under peak load conditions the office can consume up to 1.4 MW of power.
+Our aim is to model the building's power demand and zone temperature behavior from data that can be measured directly from installed sensors such as thermostats, multimeters and weather forecast.
+We learn two GP models: \(\mathcal{M}_1\) for predicting the power demand and \(\mathcal{M}_2\) for predicting the temperature of a particular zone in the building.
 The following feature variables are used for training:
 \begin{itemize}
 \item \textit{Weather variables \(d^w\):} such as outside temperature and humidity, which are derived from historical weather data.
@@ -121,3 +121,8 @@ of the GP model using GPML \cite{Rasmussen2010}.
 \end{figure}
 The prediction with 95\% confidence bounds for a particular day are shown in Figure \ref{F:prediction}.
 \todo[inline]{add results with figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
