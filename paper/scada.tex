@@ -75,18 +75,25 @@ Its documentation can be found at \url{https://github.com/mlab-upenn/pyEp}.
 
 \subsubsection{System Architecture}
 
-\todo[inline]{May include a picture here, and reduce the text below.}
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/architecture.eps}
+	\caption{Communication sequence for data exchange.}
+	\label{F:architecture}
+\end{figure}
+
 
 The EnergyPlus-OPC bridge requires two processes to start and control a simulation over OPC. 
 The first is the bridge itself, which can be started once and left in the background indefinitely. 
 The second is a controller, which determines which setpoints to write to the bridge at what time during the simulation. 
 The role of the bridge is to handle communication between EnergyPlus and the OPC server. 
 The role of the controller is to control the inputs at every time step of the EnergyPlus co-simulation by writing to the OPC server.
-At time step $t$, the bridge first writes the outputs from EnergyPlus at the previous time step $t-1$. 
-The controller then reads the outputs and uses them to determine the next set of inputs to write to the EnergyPlus input tags. 
+The communication sequence for data exchange is shown in Figure \ref{F:architecture}.
+%At time step $t$, the bridge first writes the outputs from EnergyPlus at the previous time step $t-1$. 
+%The controller then reads the outputs and uses them to determine the next set of inputs to write to the EnergyPlus input tags. 
 %For a controller running on a fixed schedule, it would use the simulation time to determine what setpoints to write. 
 %A more energy-savings focused controller might use the current power consumption to determine if a curtailment strategy should be implemented instead. 
-After the controller writes them to the input OPC tags, the bridge reads them and passes them into EnergyPlus. 
+%After the controller writes them to the input OPC tags, the bridge reads them and passes them into EnergyPlus. 
 The same process follows for the next building, until all have been incremented forward by one time step.
 The communication protocol ensures that every input and output are read to the correct EnergyPlus building, and that delays in the network communications do not cause the controller and bridge to become out-of-sync with each other. 
 The exchange of information is not real-time dependent, so human operators can change the inputs time step by time step at any pace. 
