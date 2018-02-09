@@ -4,7 +4,7 @@ ctrl_hzn = 4;
 sim_days = 2;
 
 load(fullfile(['dr_' kernel '_horizon' num2str(ctrl_hzn) '_simdays' num2str(sim_days)]));
-% load(fullfile(['power_track_' kernel '_horizon' num2str(ctrl_hzn) '_simdays' num2str(sim_days)]));
+%load(fullfile(['power_track_' kernel '_horizon' num2str(ctrl_hzn) '_simdays' num2str(sim_days)]));
 % load(fullfile(['temp_track_' kernel '_horizon' num2str(ctrl_hzn) '_simdays' num2str(sim_days)]));
 
 %% plot data
