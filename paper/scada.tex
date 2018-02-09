@@ -8,12 +8,12 @@ Additionally, it may also offer a Historian database to store historical data va
 There are two main limiting factors in bridging digital twins with existing SCADA software.
 First, most SCADA software are self-contained and the features are limited to those provided by the vendor.
 Building operators cannot view the results from E+/D+ models on the same SCADA software used for real-time monitoring because it is not clear how we can communicate between the E+/D+ models and existing SCADA software to acquire the data tags required by E+/D+ models for simulation and control, and further show the generated results on the dashboards.
-Second, if the digital twin is an E+ model, we need an external library like MATLAB EnergyPlus or MLE+ \cite{Nghiem2010} to design a controller in a scripting language like MATLAB. This is because EnergyPlus only allows to manually code rule-based control strategies.
+Second, if the digital twin is an E+ model, we need an external library like MLE+ \cite{bernaletal12mti} to design a controller in a scripting language like MATLAB. This is because EnergyPlus only allows to manually code rule-based control strategies.
 Since Python is favorable for machine learning in general, we need an alternative to MLE+ for Python. 
 
 In this work, we use the common interface of OPC to connect EnergyPlus with any existing SCADA software for real-time data communication. 
 We call this EnergyPlus-OPC bridge.
-By representing inputs to and outputs from EnergyPlus as OPC tag structures, we make the integration significantly easier for existing SCADA software, and the digital simulated building appear as a real building to the SCADA software.
+By representing inputs to and outputs from EnergyPlus as OPC tag structures, we make the integration significantly easier for existing SCADA software as the simulated building will appear as a real building to the SCADA software.
 Further, since our machine learning models are written in Python, we develop a library to interface Python and EnergyPlus -- pyEp, an equivalent of MLE+ for Python.
 We show how this library allows for intelligent control of buildings like MPC using D+ models for testing on E+ models.
 
@@ -65,6 +65,8 @@ These tools are available on the Python Package Index (PyPI) and can be installe
 
 \subsubsection{System Architecture}
 
+\todo[inline]{May include a picture here, and reduce the text below.}
+
 The EnergyPlus OPC bridge service requires two processes to start and control a simulation. 
 The first is the bridge itself, which can be started once and left in the background indefinitely. 
 The second is a controller, which determines which setpoints to write to the bridge at what time during the simulation. 
@@ -91,7 +93,7 @@ Alternatively, more complex model-based controllers like MPC as in Section \ref{
 Two example controllers are included in the pyEp library. 
 The first controller implements a setpoint schedule in Python and shows how to read/write from the controller to EnergyPlus. 
 The second controller implements a setpoint schedule based on a formatted csv file. 
-%No knowledge of Python is needed to edit and run a custom setpoint schedule.
+% No knowledge of Python is needed to edit and run a custom setpoint schedule.
 
 \subsubsection{Requirements}
 
@@ -99,3 +101,8 @@ The provided controllers use the OpenOPC library to connect to an OPC server, bu
 Additionally, the free Matrikon OPC Server Simulator is used as the default server.
 Included with pyEp is a server configuration XML generator that automatically creates the correct OPC Tree Tag structure for the Matrikon Server. 
 The pyEp core module, linking EnergyPlus to Python, is supported for Python 2.7 and 3.x, while the EnergyPlus OPC bridge requires Python 2.7.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
