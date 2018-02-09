@@ -13,7 +13,7 @@ We next show the flexibility of using these models in different applications.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\linewidth]{images/Dashboard-PowerTrack.png}
-  \caption{Demand Tracking Control}
+  \caption{Status of the LargeOffice as seen on SCADA system during Demand Tracking Control. The blue vertical line shows the current time of operation. Power consumption: the baseline power consumption is shown in dashed line, the curtailment is shown in solid green and the 95\% confidence bounds are shown in solid red. Since a fixed curtailment is tracked without thermal comfort constraints in problem \eqref{E:mpc:tracking}, the zone temperature shoots up by \(2^\circ C\).}
   \label{F:tracking}
 \end{figure*}
 
@@ -41,20 +41,30 @@ Although all the constraints in \eqref{E:mpc:tracking} are of analytical forms, 
 % For the case study in Sec.~\ref{S:casestudy} we choose a combination of a squared exponential and rational quadratic kernel which results in nonconvex problem.
 We use the nonlinear solver IPOPT \cite{Waechter2009b} and the optimization modeling framework CasADi \cite{Andersson2013b} to solve \eqref{E:mpc:tracking}.
 
+We show the real-time results on the SCADA system in Figure \ref{F:tracking}.
+The dashboard is configured to show the current power consumption, current setpoints, current weather conditions, a 12 hour history of the temperature of one of the zones (CoreMid), a 12 hour history of the setpoints -- cooling temperature (red), supply air temperature (green), chiller water temperature (blue) -- and a 12 hour history of the power consumption (solid green) along with a 12 hour forecast of the baseline consumption (dashed).
+In this example, the controller follows a rule-based strategy until 3 pm.
+A Demand Response is scheduled between 3-5 pm when D+ controller based on \eqref{E:mpc:tracking} is used.
+The controller provides a sustained curtailment of 100kW from the baseline.
+Since a fixed curtailment is desired without thermal comfort constraints, the zone temperature shoots up by \(2^\circ C\).
+
 \subsection{Climate Control with Minimum Energy Usage}
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.9\linewidth]{images/Dashboard-DR.png}
-  \caption{Climate Control}
+  \caption{Status of the LargeOffice as seen on SCADA system during Climate Control with Minimum Energy Usage. The blue vertical line shows the current time of operation. Power consumption: the baseline power consumption is shown in dashed line, the curtailment is shown in solid green and the 95\% confidence bounds are shown in solid red. Zone temperature: the thermal comfort constraint keeps the temperature between a desired range \(23-25^\circ C\) defined in the optimization problem \eqref{E:mpc:climate}.}
   \label{F:climate}
 \end{figure*}
 
-Other interesting objective for energy management is of minimizing energy usage while meeting thermal comfort constaints. In this example, we require both GP models \(\mathcal{M}_1\) and \(\mathcal{M}_2\).
-Specifically, the model \(\mathcal{M}_2\) is used to enforce thermal comfort constraints in the optimization problem below:
+Other interesting objective for energy management is of minimizing energy usage while meeting thermal comfort and operation constaints. 
+This is always desired since the consumers want to minimize their electricity bills.
+When the real-time price of electricity peaks, the utilities may also ask their customers to minimize their consumption between a specified time based on the available flexibility.
 
+In this example, we require both GP models \(\mathcal{M}_1\) and \(\mathcal{M}_2\).
+Specifically, the model \(\mathcal{M}_2\) is used to enforce thermal comfort constraints in the optimization problem below:
 \begin{align}
-&\minimize \sum_{\tau=0}^{N-1} \bar{y}_{t+\tau} + \lambda \sigma^2_{y,t+\tau} \label{E:mpc:climate} \\
+&\minimize \ \sum_{\tau=0}^{N-1} \bar{y}_{t+\tau} + \lambda \sigma^2_{y,t+\tau} \label{E:mpc:climate} \\
 & 
 \begin{aligned}
 \text{subject to}\ \  & \begin{rcases}\bar{y}_{t+\tau} = \mu(x_{t+\tau}) + K_\star K^{-1} (Y - \mu(X)) \nonumber\\
@@ -71,6 +81,12 @@ Specifically, the model \(\mathcal{M}_2\) is used to enforce thermal comfort con
 Here, \(\bar{y},\sigma^2_{y}\) denote the mean and variance of the GP \(\mathcal{M}_1\), and \(\bar{T},\sigma^2_{T}\) of the GP \(\mathcal{M}_2\). 
 The goal is to optimize the inputs \(u\) that minimize the power consumption while maintaining thermal comfort with high probability. 
 We again solve the optimization problem~\eqref{E:mpc:climate} to compute optimal \(u_{t}^*, \dots, u_{t+N-1}^*\), apply \(u_{t}^*\) to the system and proceed to time \(t+1\).
+
+We consider a Demand Response scenario when the utility company notifies this building to minimize the power consumption between 11am - 2pm.
+Between 2pm - 3pm, the controller switches to tracking the baseline consumption based on \eqref{E:mpc:tracking} to prevent a sudden kickback.
+The status of the SCADA system at 3pm is shown in Figure \ref{F:climate}.
+The controller exploits the available energy flexibility in providing maximum curtailment while ensuring that the zone temperature is always between the prescribed range \(23-25^\circ C\).
+
 
 
 %%% Local Variables:
