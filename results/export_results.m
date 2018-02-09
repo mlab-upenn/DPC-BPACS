@@ -1,20 +1,24 @@
 %Only include certain data until 4pm of the first day
 % DR Event
-time_range = 1:150;
-conf_range = 1:157;
+%time_range = 1:157;
+%conf_range = 1:157;
 % Power Tracking
-%time_range = 1:64;
-%conf_range = 1:69;
+time_range = 1:66;
+conf_range = 1:69;
 
 
 idx = isnan(prediction.('ymu'));
 lconf = prediction.('ymu') - 2 * sqrt(prediction.('ysigma2'));
 lconf(idx) = results.(vars.reference{1})(idx);
+lconf = lconf / 1000000;
 uconf = prediction.('ymu') + 2 * sqrt(prediction.('ysigma2'));
 uconf(idx) = results.(vars.reference{1})(idx);
+uconf = uconf/1000000;
 
 base = baseline.(vars.reference{1});
+base = base/1000000;
 actual = results.(vars.reference{1});
+actual = actual/1000000;
 
 
 sa = results.('SupplyAirSP');
