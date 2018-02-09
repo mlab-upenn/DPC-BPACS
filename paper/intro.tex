@@ -28,10 +28,14 @@ While the D+ models for control is a novel approach in its own right, the use of
 
 In this paper, we present an end-to-end architecture for efficient modeling and HVAC control of large scale buildings using machine learning, see Figure \ref{F:intro}. 
 We explain and demonstrate with examples our complete pipeline starting from tools for data acquisition from existing SCADA/BEMS to learning accurate control-oriented data-driven D+ models using Gaussian Processes (GP) to using D+ models for real-time predictive control with high confidence.
+We use an EnergyPlus-OPC bridge that connects E+ models to the SCADA system through a simulated OPC server. 
+We design a predictive controller using D+ models learned from the historical data obtained from a Historian database. 
+For testing the controller with E+ models, the controller communicates via the OPC server. 
+For testing the controller on a real building, secure and direct communication with SCADA is possible.
 
 \begin{figure}[t]
   \includegraphics[width=0.5\textwidth]{images/overview.png}
-  \caption{A typical architecture of a SCADA system working with a real building is shown in black, and our contributions in blue. We use an EnergyPlus-OPC bridge that connects E+ models to the SCADA system through a simulated OPC server. We design a predictive controller using D+ models learned from the historical data obtained from a Historian database. For testing the controller with E+ models, the controller communicates via the OPC server. For testing the controller on a real building, secure and direct communication with SCADA is possible.}
+  \caption{A typical architecture of a SCADA system working with a real building is shown in black, and our contributions in blue.}
   \label{F:intro}
 \end{figure}
 
