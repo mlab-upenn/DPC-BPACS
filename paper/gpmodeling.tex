@@ -114,10 +114,13 @@ For the GP, we use a constant mean function and the special covariance function 
 We optimize the hyperparameters \(\theta\) % = [\mu, k, \sigma_{f_2}, \lambda_d, \sigma_{f_3}, \alpha, \lambda] \)
 of the GP model using GPML \cite{Rasmussen2010}.
 
-\begin{figure}
-	\missingfigure[figwidth=\linewidth]{Power demand and Temperature Prediction}
-	\caption{Power demand and Temperature Prediction}
+The mean prediction \(\bar{y}\) with 95\% confidence interval \(\bar{y} \pm 2\sigma_y\) for a particular day are shown in Figure \ref{F:prediction}. With only 3 weeks of training data, we obtain a prediction accuracy of 94\% in terms of normalized root mean square error (NRMSE) and an RMSE of 47kW for a building with peak demand 1400kW and mean power demand 816kW.
+
+\begin{figure}[t]
+	\centering
+	\setlength\fwidth{0.43\textwidth} 
+	\setlength\hwidth{0.22\textwidth}
+	\input{figures/prediction_TotalLoad.tex}
+	\caption{Rolling forecast of the power demand for one particular day using GP model \(\mathcal{M}_1\). The actual demand is almost always within the 95\% confidence interval.}
 	\label{F:prediction}
 \end{figure}
-The prediction with 95\% confidence bounds for a particular day are shown in Figure \ref{F:prediction}.
-\todo[inline]{add results with figure}
