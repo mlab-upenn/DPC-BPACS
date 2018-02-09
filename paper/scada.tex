@@ -29,7 +29,7 @@ The transition from testing on E+ models to testing on real buildings can be mad
 % Once the optimal setpoints are obtained from MPC, and the corresponding digital twin response behavior can be viewed in real time in a commercial SCADA dashboard.
 
 The case studies presented later in this paper use the setup shown in Figure \ref{F:control}, in which a data-driven controller based on a D+ model acts on an E+ model as a plant.
-The EnergyPlus-OPC bridge allows us to interface an E+/D+ model to the SCADA software for real-time monitoring and closed-loop control of the building.
+The EnergyPlus-OPC bridge allows us to interface an E+/D+ model to the OPC server and thus to the SCADA software for real-time monitoring and closed-loop control of the building.
 The setpoints obtained from the controller and the corresponding responses from the digital twin can be viewed in real time in a commercial SCADA dashboard.
 
 \begin{figure}[t]
@@ -71,7 +71,7 @@ This allows for multiple EnergyPlus models being run together in a campus-like c
 An example using the Department of Energy (DoE) provided LargeOffice building model is included in the installation. 
 For an EnergyPlus IDF model file to be used with \texttt{pyEp}, it must have the \texttt{ExternalInterface} configured, as well as an associated \texttt{variables.cfg}, specifying the inputs and outputs to the \texttt{ExternalInterface}.
 \texttt{pyEp} is available on the Python Package Index (PyPI) and can be installed with the command \verb|pip install pyEp|.
-Its documentation can be found at \url{https://github.com/mlab-upenn/pyEp}.
+Its documentation can be found at \url{https://pypi.org/project/pyEp/}.
 
 \subsubsection{System Architecture}
 
